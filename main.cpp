@@ -1,96 +1,57 @@
 #include <iostream>
-#include <string>
+#include <limits.h>
 using namespace std;
 
-struct person
+void OutputArray(int **a, int n)
 {
-    string name;
-    float time;
-    person* next;
-    person* last;
-    person ( string name, float time ) {
-    this->name = name;
-    this->time = time;
-    next = NULL;
-    last = NULL;
-    }
-};
-class que
+	for (int i=0; i<n; i++)
+	{
+		for (int j=0; j<n; j++)
+			cout << a[i][j] << " ";
+		cout << endl;
+	}
+}
+
+int ** InitArray(int n)
 {
-private:
-    person* head;
-    person* find1 ( string n , person* x)
-    {
-       if ( x == NULL )
-            return NULL;
-       if ( x->name == n )
-            return x;
-       return (find1( n, x->next));
+	int **a = new int*[n];
+	for (int i=0; i<n; i++)
+	{
+		a[i] = new int[n];
+		for (int j=0; j<n; j++)
+			a[i][j] = 0;
+	}
+	return a;
+}
 
-    }
-    void dell ( person* n)
-    {
-        if ( n->last == NULL ){
-            n->next->last=NULL;
-            head = n->next;
-            delete n;
-        }
-        if ( n-> next == NULL){
-            n->last->next = 0;
-            delete n;
-        }
-       n->last->next = n->next;
-       n->next->last = n->last;
-       delete n;
-    }
+int main() {
+	int n;
+	cin >> n;
+	int a[n][2];
+	int max = INT_MIN;
+	for (int i=0; i<n; i++)
+	{
+		cin >> a[i][0] >> a[i][1];
+		if (max < a[i][0]) max = a[i][0];
+		if (max < a[i][1]) max = a[i][1];
+	}
+	int m = max + 1;
+	int **v = InitArray(m); // Матрица смежности
+	int **k = InitArray(m); // Матрица инцидентности
 
-    person* last ( person* x )
-    {
-       if ( x == NULL )
-            return NULL;
-       if ( x->next )
-            return (x->next);
-       return ( x );
-    }
-public:
+	for (int i=0; i<n; i++)
+	{
+		v[ a[i][0] ][ a[i][1] ] = 1;
+		v[ a[i][1] ][ a[i][0] ] = 1;
 
-    void push( string name, float time )
-    {
-    person* n = last (head);
-    if (n)
-        n->next = new person ( name, time );
-        n->next->last = n;
-    }
-    void exit ( string name )
-    {
-        dell ( find1( name , head ));
-    }
-    person* get()
-    {
-       person* n = head;
-       head->next->last = NULL;
-       head=head->next;
-       return n;
-    }
-    ~que()
-    {
-        while (head)
-            dell( head );
-    }
-};
+		k[ a[i][0] ][ a[i][1] ] = 1;
+		if (k[ a[i][1] ][ a[i][0] ] != 1)
+			k[ a[i][1] ][ a[i][0] ] = -1;
+	}
+	cout << "Матрица смежности" << endl;
+	OutputArray(v, m);
+	cout << "Матрица инцидентности" << endl;
+	OutputArray(k, m);
 
-int main()
-{
-    que hospital;
-    hospital.push( "Vasia Ivanov", 10.10);
-    hospital.push( "Mariy Gerasimovna",11.30);
-    hospital.push("Anonimus",13.44);
-    hospital.push( "Anatoliy Borisovich", 14.15 );
-    hospital.exit("Mariy Gerasimovna");
-    for (;;){
-     person* x = hospital.get();
-     if (x)
-            break;
-     cout<<x->name<<' '<<x->time<<endl;
-    }
+	return 0;
 }
