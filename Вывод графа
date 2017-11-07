@@ -36,8 +36,8 @@ int main() {
 		if (max < a[i][1]) max = a[i][1];
 	}
 	int m = max + 1;
-	int **v = InitArray(m); // Матрица смежности
-	int **k = InitArray(m); // Матрица инцидентности
+	int **v = InitArray(m); 
+	int **k = InitArray(m); 
 
 	for (int i=0; i<n; i++)
 	{
@@ -48,9 +48,9 @@ int main() {
 		if (k[ a[i][1] ][ a[i][0] ] != 1)
 			k[ a[i][1] ][ a[i][0] ] = -1;
 	}
-	cout << "Матрица смежности" << endl;
+	cout << "РњР°С‚СЂРёС†Р° СЃРјРµР¶РЅРѕСЃС‚Рё"<< endl;
 	OutputArray(v, m);
-	cout << "Матрица инцидентности" << endl;
+	cout << "РњР°С‚СЂРёС†Р° РёРЅС†РёРґРµРЅС‚РЅРѕСЃС‚Рё" << endl;
 	OutputArray(k, m);
 
 	return 0;
